@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repo & then install apache2 & php package
+    package:
+      name: 
+        - "{{ apache_pack }}"
+        - "{{ php_pack }}"
+      state: latest
+      update_cache: yes

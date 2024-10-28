@@ -1,0 +1,23 @@
+---
+
+- hosts: dbserver
+  become: true
+  tasks:
+  - name: install php & apache package
+    ansible.builtin.command:
+      - zypper install -y apache2
+      - zypper install -y libapache2-mod-php 
+      state: latest
+    when: ansible_distribution_file_variety in ["SUSE"]
+
+- hosts : webserver
+  become: true
+  tasks:
+  - name: update repo & then install apache2 & php package
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["Ubuntu"]
