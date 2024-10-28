@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Update repo & install apache2
+    tags: webserver,apache,ubuntu
+    apt:
+      name: apache2
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: copy web html file
+    tags: html,copy
+    copy:
+      src: default.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Restart apache service
+    tags: restart-apache
+    ansible.builtin.command: systemctl restart apache2
